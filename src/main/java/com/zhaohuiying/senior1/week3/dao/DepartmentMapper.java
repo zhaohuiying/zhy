@@ -13,6 +13,9 @@ public interface DepartmentMapper {
 	
 	
 	
+	
+	
+	
     int deleteByPrimaryKey(Integer id);
 
     int insert(Department record);
