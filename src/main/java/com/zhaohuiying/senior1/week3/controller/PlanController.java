@@ -45,7 +45,7 @@ public class PlanController {
 	@ResponseBody
 	@RequestMapping("delPlan")
 	private Object del(Integer ids) {
-		
+		System.out.println("111111111111111111111111111111111111111");
 		int deleteByPrimaryKey = planService.deleteByPrimaryKey(ids);
 		
 		return deleteByPrimaryKey>1;
