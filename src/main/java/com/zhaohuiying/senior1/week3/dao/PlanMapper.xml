@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhaohuiying.senior1.week3.dao.PlanMapper" >
+  <resultMap id="BaseResultMap" type="com.zhaohuiying.senior1.week3.domain.Plan" >
+    <id column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="pname" property="pname" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="manager" property="manager" jdbcType="VARCHAR" />
+    <result column="dept_id" property="deptId" jdbcType="INTEGER" />
+    <association property="department" javaType="com.zhaohuiying.senior1.week3.domain.Department">
+    <result column="id" property="id" />
+    <result column="name" property="name" />
+    </association>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zhaohuiying.senior1.week3.domain.Plan" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pid, pname, amount, manager, dept_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  
+  <select id="selects" resultMap="BaseResultMap">
+  		SELECT a.`pname`,a.`pid`,a.`amount`,a.`manager`,b.`name` FROM zhunneng_2019plan a  LEFT JOIN zhunneng_department b ON a.`dept_id`=b.`id`
+  		<where>
+  			<if test="pname!=null and pname !=''">
+  				pname like '%${pname}%'
+  			</if>
+  		</where>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zhunneng_2019plan
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from zhunneng_2019plan
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhaohuiying.senior1.week3.domain.Plan" >
+    insert into zhunneng_2019plan (pid, pname, amount, 
+      manager, dept_id, content
+      )
+    values (#{pid,jdbcType=INTEGER}, #{pname,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{manager,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhaohuiying.senior1.week3.domain.Plan" >
+    insert into zhunneng_2019plan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="pname != null" >
+        pname,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="manager != null" >
+        manager,
+      </if>
+      <if test="deptId != null" >
+        dept_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="pname != null" >
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="manager != null" >
+        #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhaohuiying.senior1.week3.domain.Plan" >
+    update zhunneng_2019plan
+    <set >
+      <if test="pname != null" >
+        pname = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="manager != null" >
+        manager = #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null" >
+        dept_id = #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhaohuiying.senior1.week3.domain.Plan" >
+    update zhunneng_2019plan
+    set pname = #{pname,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      manager = #{manager,jdbcType=VARCHAR},
+      dept_id = #{deptId,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhaohuiying.senior1.week3.domain.Plan" >
+    update zhunneng_2019plan
+    set pname = #{pname,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      manager = #{manager,jdbcType=VARCHAR},
+      dept_id = #{deptId,jdbcType=INTEGER}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+</mapper>
